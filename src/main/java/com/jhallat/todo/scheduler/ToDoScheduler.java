@@ -1,12 +1,14 @@
 package com.jhallat.todo.scheduler;
 
 import io.quarkus.scheduler.Scheduled;
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @ApplicationScoped
 public class ToDoScheduler {
@@ -17,6 +19,7 @@ public class ToDoScheduler {
     ToDoRepository toDoRepository;
 
     @Scheduled(cron="0 0 0 * * ?")
+    @Retry(delay = 3_600_000L, maxDuration = 43_200_200L)
     void updateToDoList() {
         var formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         var currentDate = LocalDate.now().format(formatter);
