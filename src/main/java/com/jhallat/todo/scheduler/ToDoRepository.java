@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
-//TODO This should be implemented as a REST client, and not access the database directly !!!
+
 @ApplicationScoped
 public class ToDoRepository {
 
@@ -20,5 +20,17 @@ public class ToDoRepository {
 
     public void updateTimestamp(long id, String timestamp) {
         toDoRestClient.updateTimestamp(id, new ToDoTimestamp(timestamp));
+    }
+
+    public void updateQuantity(long id, int quantity) {
+         toDoRestClient.updateQuantity(new UpdateQuantityToDoDTO(id, -quantity));
+    }
+
+    public void insertToDo(CreateToDoDTO todo) {
+         toDoRestClient.insertToDo(todo);
+    }
+
+    public List<ToDo> findAllForToday() {
+         return toDoRestClient.getTodaysItems().stream().toList();
     }
 }
