@@ -19,8 +19,7 @@ public class SchedulerApplication {
         @Override
         public int run(String...args) throws Exception {
             //Run once on startup. Any subsequent call will be scheduled
-            //TODO need to comment this out until a batch status table is created
-            //scheduler.updateToDoList();
+            scheduler.updateToDoList();
             Quarkus.waitForExit();
             return 0;
         }

@@ -1,0 +1,2 @@
+ALTER TABLE batch_status
+ALTER COLUMN status TYPE VARCHAR(15)
