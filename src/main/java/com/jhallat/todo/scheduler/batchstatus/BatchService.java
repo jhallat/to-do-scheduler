@@ -36,8 +36,9 @@ public class BatchService {
     }
 
     @Transactional
-    public void updateStatus(BatchStatus status) {
-        entityManager.merge(status);
+    public BatchStatus updateStatus(BatchStatus status) {
+        BatchStatus saved = entityManager.merge(status);
         entityManager.flush();
+        return saved;
     }
 }

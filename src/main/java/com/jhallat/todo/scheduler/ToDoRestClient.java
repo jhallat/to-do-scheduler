@@ -1,7 +1,6 @@
 package com.jhallat.todo.scheduler;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.graalvm.nativeimage.Isolates;
 
 import javax.ws.rs.*;
 import java.util.Set;
@@ -19,8 +18,8 @@ public interface ToDoRestClient {
     Set<ToDo> getTodaysItems();
 
     @PUT
-    @Path("/{id}/timestamp")
-    void updateTimestamp(@PathParam("id") long id, ToDoTimestamp timestamp);
+    @Path("/{id}/active-date")
+    void updateTimestamp(@PathParam("id") long id, ToDoActiveDate activeDate);
 
     @POST
     @Path("/quantity-adjustment")

@@ -21,17 +21,21 @@ public class CopyIncompleteBatch implements Batch {
     @Override
     public BatchResponse execute(LocalDate date) {
 
-        var formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        var formattedDate = date.format(formatter);
-        var todos = toDoRepository.findAllIncomplete();
-        int added = 0;
-        for (var todo : todos) {
-            if (todo.timestamp().compareTo(formattedDate) < 0) {
-                toDoRepository.updateTimestamp(todo.id(), formattedDate);
-                added++;
+        try {
+            var formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            var formattedDate = date.format(formatter);
+            var todos = toDoRepository.findAllIncomplete();
+            int added = 0;
+            for (var todo : todos) {
+                if (todo.activeDate().compareTo(formattedDate) < 0) {
+                    toDoRepository.updateActiveDate(todo.id(), formattedDate);
+                    added++;
+                }
             }
-        }
 
-        return new BatchResponse(true, 0, added);
+            return new BatchResponse(true, 0, added);
+        } catch (Exception exception) {
+            return new BatchResponse(false, 0, 0);
+        }
     }
 }

@@ -18,8 +18,8 @@ public class ToDoRepository {
         return toDoRestClient.getIncomplete().stream().toList();
      }
 
-    public void updateTimestamp(long id, String timestamp) {
-        toDoRestClient.updateTimestamp(id, new ToDoTimestamp(timestamp));
+    public void updateActiveDate(long id, String activeDate) {
+        toDoRestClient.updateTimestamp(id, new ToDoActiveDate(activeDate));
     }
 
     public void updateQuantity(long id, int quantity) {

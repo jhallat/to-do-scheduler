@@ -65,7 +65,7 @@ public class ToDoScheduler {
             if (status.getBatchStatus() != Status.COMPLETED) {
                 status.setBatchStatus(Status.IN_PROGRESS);
                 try {
-                    batchService.updateStatus(status);
+                    status = batchService.updateStatus(status);
                 } catch (Exception exception) {
                     LOG.error("Unable to update status for " + batch.getKey(), exception);
                     skip = true;
