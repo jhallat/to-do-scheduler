@@ -10,7 +10,9 @@ public record ToDo(@JsonProperty("id") long id,
                    @JsonProperty("description") String description,
                    @JsonProperty("completed") boolean completed,
                    @JsonProperty("taskId") long taskId,
-                   @JsonProperty("quantity") int quantity) {}
+                   @JsonProperty("quantity") int quantity,
+                   @JsonProperty("goalId") long goalId,
+                   @JsonProperty("goalDescription") String goalDescription) {}
 
 
 

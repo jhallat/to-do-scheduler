@@ -1,4 +1,4 @@
 package com.jhallat.todo.scheduler;
 
-public record CreateToDoDTO(String description, long taskId, int quantity) {
+public record CreateToDoDTO(String description, long taskId, int quantity, long goalId, String goalDescription) {
 }

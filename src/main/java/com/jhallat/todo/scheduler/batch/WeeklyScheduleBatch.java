@@ -45,7 +45,11 @@ public class WeeklyScheduleBatch implements Batch {
                         toDoRepository.updateQuantity(todo.id(), task.taskQuantity());
                         updated.getAndIncrement();
                     } else {
-                        CreateToDoDTO todo = new CreateToDoDTO(task.taskDescription(), task.taskId(), task.taskQuantity());
+                        CreateToDoDTO todo = new CreateToDoDTO(task.taskDescription(),
+                                                               task.taskId(),
+                                                               task.taskQuantity(),
+                                                               task.goalId(),
+                                                               task.goalDescription());
                         toDoRepository.insertToDo(todo);
                         added.getAndIncrement();
                     }
