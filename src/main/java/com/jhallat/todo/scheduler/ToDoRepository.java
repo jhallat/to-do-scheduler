@@ -14,9 +14,10 @@ public class ToDoRepository {
     @RestClient
     ToDoRestClient toDoRestClient;
 
-     public List<ToDo> findAllIncomplete() {
+    public List<ToDo> findAllIncomplete() {
         return toDoRestClient.getIncomplete().stream().toList();
      }
+
 
     public void updateActiveDate(long id, String activeDate) {
         toDoRestClient.updateTimestamp(id, new ToDoActiveDate(activeDate));
@@ -33,4 +34,6 @@ public class ToDoRepository {
     public List<ToDo> findAllForToday() {
          return toDoRestClient.getTodaysItems().stream().toList();
     }
+
+    public List<ToDo> findAllForActiveDate(String date) { return toDoRestClient.getByActiveDate(date).stream().toList();}
 }

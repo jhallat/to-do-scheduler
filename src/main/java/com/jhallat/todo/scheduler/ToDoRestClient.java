@@ -17,6 +17,10 @@ public interface ToDoRestClient {
     @Path("/today")
     Set<ToDo> getTodaysItems();
 
+    @GET
+    @Path("/active/{date}")
+    Set<ToDo> getByActiveDate(@PathParam("date") String date);
+
     @PUT
     @Path("/{id}/active-date")
     void updateTimestamp(@PathParam("id") long id, ToDoActiveDate activeDate);

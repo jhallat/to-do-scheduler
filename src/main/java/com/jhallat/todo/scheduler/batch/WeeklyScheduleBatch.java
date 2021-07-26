@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -32,22 +33,24 @@ public class WeeklyScheduleBatch implements Batch {
     @Override
     public BatchResponse execute(LocalDate date) {
         try {
-            AtomicInteger added = new AtomicInteger(0);
-            AtomicInteger updated = new AtomicInteger(0);
+            int added = 0;
+            int updated = 0;
+            var formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            var formattedDate = date.format(formatter);
             var currentDay = date.getDayOfWeek();
-            var taskMap = toDoRepository.findAllForToday()
+            var taskMap = toDoRepository.findAllForActiveDate(formattedDate)
                     .stream()
                     .filter(item -> item.taskId() > 0)
                     .collect(Collectors.toMap(ToDo::taskId, todo -> todo));
             var weeklySchedules = scheduleRepository.getWeeklySchedules();
-            weeklySchedules.forEach(weeklySchedule -> {
+            for (var weeklySchedule : weeklySchedules) {
                 if (applicableForDay(weeklySchedule, currentDay)) {
                     var tasks = scheduledTaskRepository.getScheduledTasks(weeklySchedule.id());
-                    tasks.forEach(task -> {
+                    for (var task : tasks) {
                         if (taskMap.containsKey(task.taskId())) {
                             var todo = taskMap.get(task.taskId());
                             toDoRepository.updateQuantity(todo.id(), task.taskQuantity());
-                            updated.getAndIncrement();
+                            updated++;
                         } else {
                             CreateToDoDTO todo = new CreateToDoDTO(task.taskDescription(),
                                     task.taskId(),
@@ -55,12 +58,12 @@ public class WeeklyScheduleBatch implements Batch {
                                     task.goalId(),
                                     task.goalDescription());
                             toDoRepository.insertToDo(todo);
-                            added.getAndIncrement();
+                            added++;
                         }
-                    });
+                    };
                 }
-            });
-            return new BatchResponse(true, updated.get(), added.get());
+            };
+            return new BatchResponse(true, updated, added);
         } catch (Exception exception) {
             LOG.error("Error occurred in weekly batch", exception);
             return new BatchResponse(false, 0, 0);
