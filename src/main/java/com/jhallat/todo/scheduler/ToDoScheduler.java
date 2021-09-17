@@ -1,9 +1,6 @@
 package com.jhallat.todo.scheduler;
 
-import com.jhallat.todo.scheduler.batch.Batch;
-import com.jhallat.todo.scheduler.batch.BatchResponse;
-import com.jhallat.todo.scheduler.batch.CopyIncompleteBatch;
-import com.jhallat.todo.scheduler.batch.WeeklyScheduleBatch;
+import com.jhallat.todo.scheduler.batch.*;
 import com.jhallat.todo.scheduler.batchstatus.BatchService;
 import com.jhallat.todo.scheduler.batchstatus.BatchStatus;
 import com.jhallat.todo.scheduler.batchstatus.Status;
@@ -14,14 +11,10 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.time.DayOfWeek.SUNDAY;
 
 @ApplicationScoped
 @ActivateRequestContext
@@ -38,6 +31,8 @@ public class ToDoScheduler {
     @Inject
     WeeklyScheduleBatch weeklyScheduleBatch;
 
+    @Inject
+    ScheduledTaskBatch scheduledTaskBatch;
 
     @Scheduled(cron="0 0 0 * * ?")
     @Retry(delay = 3_600_000L, maxDuration = 43_200_200L)
@@ -46,6 +41,7 @@ public class ToDoScheduler {
         List<Batch> batches = new ArrayList<>();
         batches.add(copyIncompleteBatch);
         batches.add(weeklyScheduleBatch);
+        batches.add(scheduledTaskBatch);
         LocalDate currentDate = LocalDate.now();
         boolean skip = false;
         for (Batch batch: batches) {
