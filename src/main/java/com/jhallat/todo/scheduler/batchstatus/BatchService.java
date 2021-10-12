@@ -35,6 +35,16 @@ public class BatchService {
         return status.get(0);
     }
 
+    public List<BatchStatus> getStatusForDate(LocalDate date) {
+
+        return (List<BatchStatus>) entityManager.createQuery("""    
+             SELECT status 
+             FROM BatchStatus status 
+             WHERE status.batchDate = :date""")
+                .setParameter("date", date)
+                .getResultList();
+    }
+
     @Transactional
     public BatchStatus updateStatus(BatchStatus status) {
         BatchStatus saved = entityManager.merge(status);

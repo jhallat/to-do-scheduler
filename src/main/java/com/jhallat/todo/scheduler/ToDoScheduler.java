@@ -29,9 +29,6 @@ public class ToDoScheduler {
     CopyIncompleteBatch copyIncompleteBatch;
 
     @Inject
-    WeeklyScheduleBatch weeklyScheduleBatch;
-
-    @Inject
     ScheduledTaskBatch scheduledTaskBatch;
 
     @Scheduled(cron="0 0 0 * * ?")
@@ -40,7 +37,6 @@ public class ToDoScheduler {
         LOG.info("Initializing Batch");
         List<Batch> batches = new ArrayList<>();
         batches.add(copyIncompleteBatch);
-        batches.add(weeklyScheduleBatch);
         batches.add(scheduledTaskBatch);
         LocalDate currentDate = LocalDate.now();
         boolean skip = false;

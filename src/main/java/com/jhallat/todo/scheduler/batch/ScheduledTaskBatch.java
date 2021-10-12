@@ -56,7 +56,7 @@ public class ScheduledTaskBatch implements Batch {
                             schedule.quantity(),
                             schedule.goalId(),
                             schedule.goalDescription());
-                    //toDoRepository.insertToDo(todo);
+                    toDoRepository.insertToDo(todo);
                     added++;
                 }
             }
