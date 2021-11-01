@@ -16,4 +16,8 @@ public class ScheduleRepository {
     public List<ScheduleForDay> getScheduleForDay(String formattedScheduleDate) {
         return scheduleRestClient.getScheduleForDay(formattedScheduleDate).stream().toList();
     }
+
+    public void updateWeeklyMaxReached(long taskId, boolean maxReached) {
+        scheduleRestClient.updateWeeklyMaxReached(new WeeklyMaxReachedDTO(taskId, maxReached));
+    }
 }

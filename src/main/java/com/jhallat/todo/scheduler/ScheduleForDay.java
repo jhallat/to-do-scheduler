@@ -6,5 +6,7 @@ public record ScheduleForDay(long taskId,
                              String scheduleType,
                              int quantity,
                              int goalId,
-                             String goalDescription) {
+                             String goalDescription,
+                             int weeklyMax,
+                             boolean weeklyMaxReached) {
 }

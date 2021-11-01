@@ -44,20 +44,29 @@ public class ScheduledTaskBatch implements Batch {
             LOG.info("Returned " + taskMap.size() + " active tasks");
             var schedules = scheduleRepository.getScheduleForDay(formattedScheduleDate);
             for (var schedule : schedules) {
-                if (taskMap.containsKey(schedule.taskId())) {
-                    if (schedule.quantifiable()) {
-                        var todo = taskMap.get(schedule.taskId());
-                        toDoRepository.updateQuantity(todo.id(), schedule.quantity());
-                        updated++;
+                if (!schedule.weeklyMaxReached()) {
+                    if (taskMap.containsKey(schedule.taskId())) {
+                        if (schedule.quantifiable()) {
+                            var todo = taskMap.get(schedule.taskId());
+                            int addQuantity = schedule.quantity();
+                            if (todo.quantity() + schedule.quantity() >= schedule.weeklyMax()) {
+                                addQuantity = schedule.weeklyMax() - todo.quantity();
+                                scheduleRepository.updateWeeklyMaxReached(todo.taskId(), true);
+                            }
+                            if (addQuantity > 0) {
+                                toDoRepository.updateQuantity(todo.id(), addQuantity);
+                            }
+                            updated++;
+                        }
+                    } else {
+                        CreateToDoDTO todo = new CreateToDoDTO(schedule.description(),
+                                schedule.taskId(),
+                                schedule.quantity(),
+                                schedule.goalId(),
+                                schedule.goalDescription());
+                        toDoRepository.insertToDo(todo);
+                        added++;
                     }
-                } else {
-                    CreateToDoDTO todo = new CreateToDoDTO(schedule.description(),
-                            schedule.taskId(),
-                            schedule.quantity(),
-                            schedule.goalId(),
-                            schedule.goalDescription());
-                    toDoRepository.insertToDo(todo);
-                    added++;
                 }
             }
             return new BatchResponse(true, updated, added);

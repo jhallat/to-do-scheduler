@@ -1,5 +1,6 @@
 package com.jhallat.todo.scheduler;
 
+import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
@@ -11,14 +12,17 @@ public interface ToDoRestClient {
 
     @GET
     @Path("/incomplete")
+    @ClientHeaderParam(name="User", value="*")
     Set<ToDo> getIncomplete();
 
     @GET
     @Path("/today")
+    @ClientHeaderParam(name="User", value="*")
     Set<ToDo> getTodaysItems();
 
     @GET
     @Path("/active/{date}")
+    @ClientHeaderParam(name="User", value="*")
     Set<ToDo> getByActiveDate(@PathParam("date") String date);
 
     @PUT
